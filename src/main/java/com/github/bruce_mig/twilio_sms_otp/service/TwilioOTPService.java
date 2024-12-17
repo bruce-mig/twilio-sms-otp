@@ -23,7 +23,7 @@ public class TwilioOTPService {
         this.twilioConfig = twilioConfig;
     }
 
-    Map<String,String> otpMap = new HashMap<>();
+    Map<String,String> otpMap = new HashMap<>();  // todo: use redis
 
     public Mono<PasswordResetResponseDto> sendOTPForPasswordReset(PasswordResetRequestDto passwordResetRequestDto) {
         PasswordResetResponseDto passwordResetResponseDto = new PasswordResetResponseDto();
@@ -32,6 +32,7 @@ public class TwilioOTPService {
             PhoneNumber from = new PhoneNumber(twilioConfig.getTrialNumber());
             String otp = generateOTP();
 
+            // todo: improve message
             String otpMessage = "Dear Customer , Your OTP is ##" + otp + "##. Use this Passcode to complete your transaction. Thank You.";
 
             Message message = Message
@@ -52,6 +53,7 @@ public class TwilioOTPService {
 
     public Mono<Boolean> isValidOTP(String userInputOtp, String userName) {
         if (userInputOtp.equals(otpMap.get(userName))) {
+            otpMap.remove(userName, userInputOtp);
             return Mono.just(Boolean.TRUE);
         } else {
             return Mono.just(Boolean.FALSE);
