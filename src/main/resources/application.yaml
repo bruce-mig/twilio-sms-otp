@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: twilio-sms-otp
+
+twilio:
+  account-sid: ${ACCOUNT_SID}
+  auth-token: ${AUTH_TOKEN}
+  trial-number: ${TRIAL_NUMBER}
