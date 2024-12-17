@@ -1,8 +1,13 @@
 package com.github.bruce_mig.twilio_sms_otp.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class PasswordResetRequestDto {
+    @JsonProperty("phone_number")
      private String phoneNumber;
+    @JsonProperty("user_name")
      private String userName;
+    @JsonProperty("otp")
      private String oneTimePassword;
 
     public PasswordResetRequestDto(String phoneNumber, String userName, String otp) {
