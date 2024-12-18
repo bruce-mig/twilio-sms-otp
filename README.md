@@ -25,7 +25,7 @@ export AUTH_TOKEN=**********************
 export TRIAL_NUMBER=<twilio-trial-number>
 ```
 
-   The `TRIAL_NUMBER` is provided when one creates a twilio account at [twilio](https://www.twilio.com/en-us)
+   - The `TRIAL_NUMBER` is provided when one creates a twilio account at [twilio](https://www.twilio.com/en-us)
 
 4. Start Redis server using command `docker compose up`
 
