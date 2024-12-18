@@ -1,6 +1,19 @@
 spring:
   application:
     name: twilio-sms-otp
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      password: redispass
+      database: 0
+      timeout: 10000
+      username: redisuser
+      lettuce:
+        pool:
+          max-active: 10
+          max-idle: 10
+          min-idle: 2
 
 twilio:
   account-sid: ${ACCOUNT_SID}
