@@ -14,7 +14,7 @@ git clone https://github.com/bruce-mig/twilio-sms-otp.git
 
 2. Navigate to application directory `cd twilio-sms-otp`.
 
-3. Create a set-env.sh file with  and fill in the appropriate fields.
+3. Create a `set-env.sh` file fill in the appropriate values.
 
 ```bash
 #!/bin/bash
@@ -25,7 +25,7 @@ export AUTH_TOKEN=**********************
 export TRIAL_NUMBER=<twilio-trial-number>
 ```
 
-The TRIAL_NUMBER is provided when one creates a twilio account at [twilio](https://www.twilio.com/en-us)
+   The `TRIAL_NUMBER` is provided when one creates a twilio account at [twilio](https://www.twilio.com/en-us)
 
 4. Start Redis server using command `docker compose up`
 
@@ -37,7 +37,7 @@ sudo chmod +x set-env.sh \
 source ./set-env.sh \
 mvn spring-boot:run
 ```
-The application wil start at port `:8080`
+The application will start at port `:8080`
 
 ---
 
