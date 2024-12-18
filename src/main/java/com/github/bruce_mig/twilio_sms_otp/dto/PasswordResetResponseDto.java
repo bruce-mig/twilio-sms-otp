@@ -1,5 +1,7 @@
 package com.github.bruce_mig.twilio_sms_otp.dto;
 
+import java.util.Objects;
+
 public class PasswordResetResponseDto {
 
     private OtpStatus status;
@@ -35,5 +37,17 @@ public class PasswordResetResponseDto {
                 "status=" + status +
                 ", message='" + message + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        PasswordResetResponseDto that = (PasswordResetResponseDto) o;
+        return status == that.status && Objects.equals(message, that.message);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(status, message);
     }
 }
