@@ -6,6 +6,7 @@ import com.github.bruce_mig.twilio_sms_otp.dto.PasswordResetRequestDto;
 import com.github.bruce_mig.twilio_sms_otp.dto.PasswordResetResponseDto;
 import com.twilio.rest.api.v2010.account.Message;
 import com.twilio.type.PhoneNumber;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
@@ -18,12 +19,12 @@ import java.util.Random;
 public class TwilioOTPService {
 
     private final TwilioConfig twilioConfig;
+    private final RedisService redisService;
 
-    public TwilioOTPService(TwilioConfig twilioConfig) {
+    public TwilioOTPService(TwilioConfig twilioConfig, RedisService redisService) {
         this.twilioConfig = twilioConfig;
+        this.redisService = redisService;
     }
-
-    Map<String,String> otpMap = new HashMap<>();  // todo: use redis
 
     public Mono<PasswordResetResponseDto> sendOTPForPasswordReset(PasswordResetRequestDto passwordResetRequestDto) {
         PasswordResetResponseDto passwordResetResponseDto = new PasswordResetResponseDto();
@@ -32,13 +33,13 @@ public class TwilioOTPService {
             PhoneNumber from = new PhoneNumber(twilioConfig.getTrialNumber());
             String otp = generateOTP();
 
-            // todo: improve message
-            String otpMessage = "Dear Customer , Your OTP is ##" + otp + "##. Use this Passcode to complete your transaction. Thank You.";
+            String otpMessage = "Dear Customer , Your OTP is ##" + otp + "##. Use this Passcode to complete your transaction. Thank You. Your OTP Expires in 5 minutes";
 
             Message message = Message
                     .creator(to,from, otpMessage)
                     .create();
-            otpMap.put(passwordResetRequestDto.getUserName(), otp);
+
+            redisService.insertOTP(passwordResetRequestDto.getUserName(),otp);
 
             passwordResetResponseDto.setStatus(OtpStatus.DELIVERED);
             passwordResetResponseDto.setMessage(otpMessage);
@@ -52,8 +53,10 @@ public class TwilioOTPService {
     }
 
     public Mono<Boolean> isValidOTP(String userInputOtp, String userName) {
-        if (userInputOtp.equals(otpMap.get(userName))) {
-            otpMap.remove(userName, userInputOtp);
+        String retrievedOtp = redisService.getOTP(userName);
+
+        if (userInputOtp.equals(retrievedOtp)) {
+            redisService.deleteOTP(userName);
             return Mono.just(Boolean.TRUE);
         } else {
             return Mono.just(Boolean.FALSE);
