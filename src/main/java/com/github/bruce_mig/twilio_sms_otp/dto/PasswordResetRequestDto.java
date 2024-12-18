@@ -2,6 +2,8 @@ package com.github.bruce_mig.twilio_sms_otp.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.Objects;
+
 public class PasswordResetRequestDto {
     @JsonProperty("phone_number")
      private String phoneNumber;
@@ -50,5 +52,17 @@ public class PasswordResetRequestDto {
                 ", userName='" + userName + '\'' +
                 ", oneTimePassword='" + oneTimePassword + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        PasswordResetRequestDto that = (PasswordResetRequestDto) o;
+        return Objects.equals(phoneNumber, that.phoneNumber) && Objects.equals(userName, that.userName) && Objects.equals(oneTimePassword, that.oneTimePassword);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(phoneNumber, userName, oneTimePassword);
     }
 }
